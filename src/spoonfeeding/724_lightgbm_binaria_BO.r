@@ -309,6 +309,22 @@ if (file.exists(klog)) {
 # paso la clase a binaria que tome valores {0,1}  enteros
 dataset[, clase01 := ifelse(clase_ternaria == "CONTINUA", 0L, 1L)]
 
+# Aplicamos SMOTE para balancear las clases
+cat("Aplicando SMOTE para balancear las clases...\n")
+library(DMwR)  # Librería SMOTE
+
+# Definir las características (X) y la variable objetivo (y)
+X <- dataset[, setdiff(colnames(dataset), c("clase_ternaria", "clase01")), with=FALSE]
+y <- dataset$clase01
+
+# Aplicar SMOTE para balancear las clases (usamos la columna clase01)
+dataset_balanced <- SMOTE(clase01 ~ ., data = dataset, perc.over = 200, perc.under = 150)
+
+cat("Fin de SMOTE.\n")
+
+# Usamos dataset_balanced en lugar del dataset original en el resto del script
+dataset <- dataset_balanced
+
 
 # los campos que se van a utilizar
 campos_buenos <- setdiff(

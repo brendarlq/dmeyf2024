@@ -29,28 +29,17 @@ options(error = function() {
 PARAM <- list()
 
 PARAM$experimento <- "PP7230"
-
 PARAM$input$dataset <- "./datasets/competencia_01_R.csv"
-
 PARAM$semilla_azar <- 315697 # Aqui poner su  primer  semilla
-
-
-PARAM$driftingcorreccion <- "ninguno"
+PARAM$driftingcorreccion <- "estandarizar"
 PARAM$clase_minoritaria <- c("BAJA+1","BAJA+2")
-
-# los meses en los que vamos a entrenar
-#  la magia estara en experimentar exhaustivamente
 PARAM$trainingstrategy$testing <- c(202104)
 PARAM$trainingstrategy$validation <- c(202103)
 PARAM$trainingstrategy$training <- c(202102)
-
-
 PARAM$trainingstrategy$final_train <- c(202102, 202103, 202104)
 PARAM$trainingstrategy$future <- c(202106)
-
 # un undersampling de 0.1  toma solo el 10% de los CONTINUA
 PARAM$trainingstrategy$training_undersampling <- 1.0
-
 # esta aberracion fue creada a pedido de Joaquin Tschopp
 #  Publicamente Gustavo Denicolay NO se hace cargo de lo que suceda
 #   si se asigna un valor menor a 1.0
@@ -306,8 +295,13 @@ setwd(paste0("./exp/", PARAM$experimento, "/"))
 
 # ordeno dataset
 setorder(dataset, numero_de_cliente, foto_mes)
-# corrijo usando el metido MachineLearning
-Corregir_Rotas(dataset, "MachineLearning")
+
+
+##MICE en vez de corregir rotas
+cat("Inicio de imputación avanzada con MICE...\n")
+imputed_data <- mice(dataset, m = 5, method = 'pmm', maxit = 10, seed = 500)
+dataset <- complete(imputed_data)
+cat("Fin de imputación avanzada.\n")
 
 
 #2) Data Drifting  --------------------------------------------------------------
@@ -435,6 +429,9 @@ if (nans_qty > 0) {
   dataset[mapply(is.nan, dataset)] <- 0
 }
 
+##agregamos logaritmo de las variables monetarias para estabilizar la varianza
+monetary_vars <- c("Visa_mconsumototal", "Master_mconsumototal", "vm_mlimitecompra")
+dataset[, (monetary_vars) := lapply(.SD, function(x) log1p(x)), .SDcols = monetary_vars]
 
 
 # 3.2) Feature Engineering Historico  ----------------------------------------------
@@ -458,6 +455,17 @@ dataset[, paste0(cols_lagueables, "_lag1") := shift(.SD, 1, NA, "lag"),
         by = numero_de_cliente,
         .SDcols = cols_lagueables
 ]
+
+# Crear lags de mayor orden (por ejemplo lag 2 y lag 3)
+for (vcol in cols_lagueables) {
+  dataset[, paste0(vcol, "_lag2") := shift(.SD, 2, NA, "lag"),
+          by = numero_de_cliente,
+          .SDcols = vcol]
+  
+  dataset[, paste0(vcol, "_lag3") := shift(.SD, 3, NA, "lag"),
+          by = numero_de_cliente,
+          .SDcols = vcol]
+}
 
 # agrego los delta lags de orden 1
 for (vcol in cols_lagueables)

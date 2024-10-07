@@ -28,7 +28,7 @@ PARAM <- list()
 PARAM$experimento_data <- "PP7230"
 PARAM$experimento_bayesiana <- "HT7240"
 
-PARAM$experimento <- "KA7250"
+PARAM$experimento <- "KA7251"
 
 
 #------------------------------------------------------------------------------

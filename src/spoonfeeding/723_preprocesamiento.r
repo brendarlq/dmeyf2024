@@ -37,9 +37,9 @@ PARAM$clase_minoritaria <- c("BAJA+1","BAJA+2")
 
 # los meses en los que vamos a entrenar
 #  la magia estara en experimentar exhaustivamente
-PARAM$trainingstrategy$testing <- c(202104)
-PARAM$trainingstrategy$validation <- c(202104)
-PARAM$trainingstrategy$training <- c(202103)
+PARAM$trainingstrategy$testing <- c(202106)
+PARAM$trainingstrategy$validation <- c(202105)
+PARAM$trainingstrategy$training <- c(202104)
 
 
 PARAM$trainingstrategy$final_train <- c(202104)
@@ -282,7 +282,7 @@ setwd(paste0("./exp/", PARAM$experimento, "/"))
 # ordeno dataset
 setorder(dataset, numero_de_cliente, foto_mes)
 # corrijo usando el metido MachineLearning
-Corregir_Rotas(dataset, "MachineLearning")
+#Corregir_Rotas(dataset, "MachineLearning")
 
 
 # Data Drifting  --------------------------------------------------------------
@@ -321,18 +321,18 @@ dataset[, kmes := foto_mes %% 100]
 # los clientes hace 3 menos meses que estan
 # ya que seria injusto considerar las transacciones medidas en menor tiempo
 
-dataset[, ctrx_quarter_normalizado := as.numeric(ctrx_quarter) ]
-dataset[cliente_antiguedad == 1, ctrx_quarter_normalizado := ctrx_quarter * 5]
-dataset[cliente_antiguedad == 2, ctrx_quarter_normalizado := ctrx_quarter * 2]
+#dataset[, ctrx_quarter_normalizado := as.numeric(ctrx_quarter) ]
+#dataset[cliente_antiguedad == 1, ctrx_quarter_normalizado := ctrx_quarter * 5]
+#dataset[cliente_antiguedad == 2, ctrx_quarter_normalizado := ctrx_quarter * 2]
 
-dataset[
-  cliente_antiguedad == 3,
-  ctrx_quarter_normalizado := ctrx_quarter * 1.2
-]
+#dataset[
+#  cliente_antiguedad == 3,
+#  ctrx_quarter_normalizado := ctrx_quarter * 1.2
+#]
 
 # variable extraida de una tesis de maestria de Irlanda
 #  perdi el link a la tesis, NO es de mi autoria
-dataset[, mpayroll_sobre_edad := mpayroll / cliente_edad]
+#dataset[, mpayroll_sobre_edad := mpayroll / cliente_edad]
 
 
 # Por supuesto, usted puede COMENTARIAR todo lo que desee
@@ -425,7 +425,7 @@ cols_lagueables <- copy(
 )
 
 # Definir el número de órdenes de lags y delta lags que quieres crear
-max_lag <- 3  # Cambia este valor para agregar más órdenes de lags
+max_lag <- 2  # Cambia este valor para agregar más órdenes de lags
 
 # Las columnas sobre las cuales aplicaremos los lags
 cols_lagueables <- setdiff(colnames(dataset), c("numero_de_cliente", "foto_mes", "clase_ternaria"))

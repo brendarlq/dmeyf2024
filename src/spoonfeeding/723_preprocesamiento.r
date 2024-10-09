@@ -29,7 +29,7 @@ PARAM$experimento <- "PP7230"
 
 PARAM$input$dataset <- "./datasets/competencia_01_R.csv"
 
-PARAM$semilla_azar <- 102191 # Aqui poner su  primer  semilla
+PARAM$semilla_azar <- 315697 # Aqui poner su  primer  semilla
 
 
 PARAM$driftingcorreccion <- "ninguno"
@@ -37,8 +37,8 @@ PARAM$clase_minoritaria <- c("BAJA+1","BAJA+2")
 
 # los meses en los que vamos a entrenar
 #  la magia estara en experimentar exhaustivamente
-PARAM$trainingstrategy$testing <- c(202105)
-PARAM$trainingstrategy$validation <- c(202104)
+PARAM$trainingstrategy$testing <- c(202104)
+PARAM$trainingstrategy$validation <- c(202102)
 PARAM$trainingstrategy$training <- c(202103)
 
 
@@ -246,25 +246,10 @@ drift_estandarizar <- function(campos_drift) {
 #  la salud mental de los alumnos es el bien mas preciado 
 action_limitar_memoria( 4 )
 
-
- # tabla de indices financieros
-tb_indices <- as.data.table( list( 
-  "IPC" = vIPC,
-  "dolar_blue" = vdolar_blue,
-  "dolar_oficial" = vdolar_oficial,
-  "UVA" = vUVA
-  )
-)
-
-tb_indices$foto_mes <- vfoto_mes
-
-tb_indices
-
 setwd("~/buckets/b1/") # Establezco el Working Directory
 
 # cargo el dataset donde voy a entrenar el modelo
 dataset <- fread(PARAM$input$dataset)
-
 
 
 # creo la carpeta donde va el experimento
@@ -282,7 +267,7 @@ setwd(paste0("./exp/", PARAM$experimento, "/"))
 # ordeno dataset
 setorder(dataset, numero_de_cliente, foto_mes)
 # corrijo usando el metido MachineLearning
-#Corregir_Rotas(dataset, "MachineLearning")
+Corregir_Rotas(dataset, "MachineLearning")
 
 
 # Data Drifting  --------------------------------------------------------------
@@ -321,14 +306,14 @@ dataset[, kmes := foto_mes %% 100]
 # los clientes hace 3 menos meses que estan
 # ya que seria injusto considerar las transacciones medidas en menor tiempo
 
-#dataset[, ctrx_quarter_normalizado := as.numeric(ctrx_quarter) ]
-#dataset[cliente_antiguedad == 1, ctrx_quarter_normalizado := ctrx_quarter * 5]
-#dataset[cliente_antiguedad == 2, ctrx_quarter_normalizado := ctrx_quarter * 2]
+dataset[, ctrx_quarter_normalizado := as.numeric(ctrx_quarter) ]
+dataset[cliente_antiguedad == 1, ctrx_quarter_normalizado := ctrx_quarter * 5]
+dataset[cliente_antiguedad == 2, ctrx_quarter_normalizado := ctrx_quarter * 2]
 
-#dataset[
-#  cliente_antiguedad == 3,
-#  ctrx_quarter_normalizado := ctrx_quarter * 1.2
-#]
+dataset[
+  cliente_antiguedad == 3,
+ ctrx_quarter_normalizado := ctrx_quarter * 1.2
+]
 
 # variable extraida de una tesis de maestria de Irlanda
 #  perdi el link a la tesis, NO es de mi autoria

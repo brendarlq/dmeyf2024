@@ -34,9 +34,9 @@ PARAM$semilla_azar <- 315697 # Aqui poner su  primer  semilla
 PARAM$driftingcorreccion <- "estandarizar"
 PARAM$clase_minoritaria <- c("BAJA+1","BAJA+2")
 PARAM$trainingstrategy$testing <- c(202104)
-PARAM$trainingstrategy$validation <- c(202103)
-PARAM$trainingstrategy$training <- c(202102)
-PARAM$trainingstrategy$final_train <- c(202102, 202103, 202104)
+PARAM$trainingstrategy$validation <- c(202104)
+PARAM$trainingstrategy$training <- c(202103)
+PARAM$trainingstrategy$final_train <- c(202104)
 PARAM$trainingstrategy$future <- c(202106)
 # un undersampling de 0.1  toma solo el 10% de los CONTINUA
 PARAM$trainingstrategy$training_undersampling <- 1.0
@@ -356,42 +356,42 @@ dataset[, mpayroll_sobre_edad := mpayroll / cliente_edad]
 
 
 # Por supuesto, usted puede COMENTARIAR todo lo que desee
-dataset[, vm_mfinanciacion_limite := rowSums(cbind(Master_mfinanciacion_limite, Visa_mfinanciacion_limite), na.rm = TRUE)]
-dataset[, vm_Fvencimiento := pmin(Master_Fvencimiento, Visa_Fvencimiento, na.rm = TRUE)]
-dataset[, vm_Finiciomora := pmin(Master_Finiciomora, Visa_Finiciomora, na.rm = TRUE)]
-dataset[, vm_msaldototal := rowSums(cbind(Master_msaldototal, Visa_msaldototal), na.rm = TRUE)]
-dataset[, vm_msaldopesos := rowSums(cbind(Master_msaldopesos, Visa_msaldopesos), na.rm = TRUE)]
-dataset[, vm_msaldodolares := rowSums(cbind(Master_msaldodolares, Visa_msaldodolares), na.rm = TRUE)]
-dataset[, vm_mconsumospesos := rowSums(cbind(Master_mconsumospesos, Visa_mconsumospesos), na.rm = TRUE)]
-dataset[, vm_mconsumosdolares := rowSums(cbind(Master_mconsumosdolares, Visa_mconsumosdolares), na.rm = TRUE)]
-dataset[, vm_mlimitecompra := rowSums(cbind(Master_mlimitecompra, Visa_mlimitecompra), na.rm = TRUE)]
-dataset[, vm_madelantopesos := rowSums(cbind(Master_madelantopesos, Visa_madelantopesos), na.rm = TRUE)]
-dataset[, vm_madelantodolares := rowSums(cbind(Master_madelantodolares, Visa_madelantodolares), na.rm = TRUE)]
-dataset[, vm_fultimo_cierre := pmax(Master_fultimo_cierre, Visa_fultimo_cierre, na.rm = TRUE)]
-dataset[, vm_mpagado := rowSums(cbind(Master_mpagado, Visa_mpagado), na.rm = TRUE)]
-dataset[, vm_mpagospesos := rowSums(cbind(Master_mpagospesos, Visa_mpagospesos), na.rm = TRUE)]
-dataset[, vm_mpagosdolares := rowSums(cbind(Master_mpagosdolares, Visa_mpagosdolares), na.rm = TRUE)]
-dataset[, vm_fechaalta := pmax(Master_fechaalta, Visa_fechaalta, na.rm = TRUE)]
-dataset[, vm_mconsumototal := rowSums(cbind(Master_mconsumototal, Visa_mconsumototal), na.rm = TRUE)]
-dataset[, vm_cconsumos := rowSums(cbind(Master_cconsumos, Visa_cconsumos), na.rm = TRUE)]
-dataset[, vm_cadelantosefectivo := rowSums(cbind(Master_cadelantosefectivo, Visa_cadelantosefectivo), na.rm = TRUE)]
-dataset[, vm_mpagominimo := rowSums(cbind(Master_mpagominimo, Visa_mpagominimo), na.rm = TRUE)]
-dataset[, vmr_Master_mlimitecompra := Master_mlimitecompra / vm_mlimitecompra]
-dataset[, vmr_Visa_mlimitecompra := Visa_mlimitecompra / vm_mlimitecompra]
-dataset[, vmr_msaldototal := vm_msaldototal / vm_mlimitecompra]
-dataset[, vmr_msaldopesos := vm_msaldopesos / vm_mlimitecompra]
-dataset[, vmr_msaldopesos2 := vm_msaldopesos / vm_msaldototal]
-dataset[, vmr_msaldodolares := vm_msaldodolares / vm_mlimitecompra]
-dataset[, vmr_msaldodolares2 := vm_msaldodolares / vm_msaldototal]
-dataset[, vmr_mconsumospesos := vm_mconsumospesos / vm_mlimitecompra]
-dataset[, vmr_mconsumosdolares := vm_mconsumosdolares / vm_mlimitecompra]
-dataset[, vmr_madelantopesos := vm_madelantopesos / vm_mlimitecompra]
-dataset[, vmr_madelantodolares := vm_madelantodolares / vm_mlimitecompra]
-dataset[, vmr_mpagado := vm_mpagado / vm_mlimitecompra]
-dataset[, vmr_mpagospesos := vm_mpagospesos / vm_mlimitecompra]
-dataset[, vmr_mpagosdolares := vm_mpagosdolares / vm_mlimitecompra]
-dataset[, vmr_mconsumototal := vm_mconsumototal / vm_mlimitecompra]
-dataset[, vmr_mpagominimo := vm_mpagominimo / vm_mlimitecompra]
+#dataset[, vm_mfinanciacion_limite := rowSums(cbind(Master_mfinanciacion_limite, Visa_mfinanciacion_limite), na.rm = TRUE)]
+#dataset[, vm_Fvencimiento := pmin(Master_Fvencimiento, Visa_Fvencimiento, na.rm = TRUE)]
+#dataset[, vm_Finiciomora := pmin(Master_Finiciomora, Visa_Finiciomora, na.rm = TRUE)]
+#dataset[, vm_msaldototal := rowSums(cbind(Master_msaldototal, Visa_msaldototal), na.rm = TRUE)]
+#dataset[, vm_msaldopesos := rowSums(cbind(Master_msaldopesos, Visa_msaldopesos), na.rm = TRUE)]
+#dataset[, vm_msaldodolares := rowSums(cbind(Master_msaldodolares, Visa_msaldodolares), na.rm = TRUE)]
+#dataset[, vm_mconsumospesos := rowSums(cbind(Master_mconsumospesos, Visa_mconsumospesos), na.rm = TRUE)]
+#dataset[, vm_mconsumosdolares := rowSums(cbind(Master_mconsumosdolares, Visa_mconsumosdolares), na.rm = TRUE)]
+#dataset[, vm_mlimitecompra := rowSums(cbind(Master_mlimitecompra, Visa_mlimitecompra), na.rm = TRUE)]
+#dataset[, vm_madelantopesos := rowSums(cbind(Master_madelantopesos, Visa_madelantopesos), na.rm = TRUE)]
+#dataset[, vm_madelantodolares := rowSums(cbind(Master_madelantodolares, Visa_madelantodolares), na.rm = TRUE)]
+#dataset[, vm_fultimo_cierre := pmax(Master_fultimo_cierre, Visa_fultimo_cierre, na.rm = TRUE)]
+#dataset[, vm_mpagado := rowSums(cbind(Master_mpagado, Visa_mpagado), na.rm = TRUE)]
+#dataset[, vm_mpagospesos := rowSums(cbind(Master_mpagospesos, Visa_mpagospesos), na.rm = TRUE)]
+#dataset[, vm_mpagosdolares := rowSums(cbind(Master_mpagosdolares, Visa_mpagosdolares), na.rm = TRUE)]
+#dataset[, vm_fechaalta := pmax(Master_fechaalta, Visa_fechaalta, na.rm = TRUE)]
+#dataset[, vm_mconsumototal := rowSums(cbind(Master_mconsumototal, Visa_mconsumototal), na.rm = TRUE)]
+#dataset[, vm_cconsumos := rowSums(cbind(Master_cconsumos, Visa_cconsumos), na.rm = TRUE)]
+#dataset[, vm_cadelantosefectivo := rowSums(cbind(Master_cadelantosefectivo, Visa_cadelantosefectivo), na.rm = TRUE)]
+#dataset[, vm_mpagominimo := rowSums(cbind(Master_mpagominimo, Visa_mpagominimo), na.rm = TRUE)]
+#dataset[, vmr_Master_mlimitecompra := Master_mlimitecompra / vm_mlimitecompra]
+#dataset[, vmr_Visa_mlimitecompra := Visa_mlimitecompra / vm_mlimitecompra]
+#dataset[, vmr_msaldototal := vm_msaldototal / vm_mlimitecompra]
+#dataset[, vmr_msaldopesos := vm_msaldopesos / vm_mlimitecompra]
+#dataset[, vmr_msaldopesos2 := vm_msaldopesos / vm_msaldototal]
+#dataset[, vmr_msaldodolares := vm_msaldodolares / vm_mlimitecompra]
+#dataset[, vmr_msaldodolares2 := vm_msaldodolares / vm_msaldototal]
+#dataset[, vmr_mconsumospesos := vm_mconsumospesos / vm_mlimitecompra]
+#dataset[, vmr_mconsumosdolares := vm_mconsumosdolares / vm_mlimitecompra]
+#dataset[, vmr_madelantopesos := vm_madelantopesos / vm_mlimitecompra]
+#dataset[, vmr_madelantodolares := vm_madelantodolares / vm_mlimitecompra]
+#dataset[, vmr_mpagado := vm_mpagado / vm_mlimitecompra]
+#dataset[, vmr_mpagospesos := vm_mpagospesos / vm_mlimitecompra]
+#dataset[, vmr_mpagosdolares := vm_mpagosdolares / vm_mlimitecompra]
+#dataset[, vmr_mconsumototal := vm_mconsumototal / vm_mlimitecompra]
+#dataset[, vmr_mpagominimo := vm_mpagominimo / vm_mlimitecompra]
 
 # valvula de seguridad para evitar valores infinitos
 # paso los infinitos a NULOS
@@ -438,40 +438,28 @@ dataset[, (monetary_vars) := lapply(.SD, function(x) log1p(x)), .SDcols = moneta
 #   aqui deben calcularse los  lags y  lag_delta
 #   Sin lags no hay paraiso !  corta la bocha
 
-campitos <- c( "numero_de_cliente",
-               "foto_mes",
-               "clase_ternaria")
 
+# Definir el número de órdenes de lags y delta lags que quieres crear
+max_lag <- 3  # Cambia este valor para agregar más órdenes de lags
 
-cols_lagueables <- copy(
-  setdiff(colnames(dataset), campitos)
-)
+# Las columnas sobre las cuales aplicaremos los lags
+cols_lagueables <- setdiff(colnames(dataset), c("numero_de_cliente", "foto_mes", "clase_ternaria"))
 
-# ordeno el dataset, FUNDAMENTAL
+# Ordenar el dataset por cliente y foto_mes antes de generar los lags
 setorder(dataset, numero_de_cliente, foto_mes)
 
-# creo los lags de orden 1
-dataset[, paste0(cols_lagueables, "_lag1") := shift(.SD, 1, NA, "lag"),
-        by = numero_de_cliente,
-        .SDcols = cols_lagueables
-]
-
-# Crear lags de mayor orden (por ejemplo lag 2 y lag 3)
-for (vcol in cols_lagueables) {
-  dataset[, paste0(vcol, "_lag2") := shift(.SD, 2, NA, "lag"),
-          by = numero_de_cliente,
-          .SDcols = vcol]
+# Crear los lags para cada orden
+for (lag_order in 1:max_lag) {
+  # Crear los lags de orden n
+  dataset[, paste0(cols_lagueables, "_lag", lag_order) := shift(.SD, lag_order, NA, "lag"),
+          by = numero_de_cliente, .SDcols = cols_lagueables]
   
-  dataset[, paste0(vcol, "_lag3") := shift(.SD, 3, NA, "lag"),
-          by = numero_de_cliente,
-          .SDcols = vcol]
+  # Crear los delta lags (diferencia entre el valor actual y el lag)
+  for (col in cols_lagueables) {
+    dataset[, paste0(col, "_delta", lag_order) := get(col) - get(paste0(col, "_lag", lag_order))]
+  }
 }
 
-# agrego los delta lags de orden 1
-for (vcol in cols_lagueables)
-{
-  dataset[, paste0(vcol, "_delta1") := get(vcol) - get(paste0(vcol, "_lag1"))]
-}
 
 
 # 4) Training Strategy  ----------------------------------------------

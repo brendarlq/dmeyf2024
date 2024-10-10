@@ -26,16 +26,16 @@ options(error = function() {
 #  muy pronto esto se leera desde un archivo formato .yaml
 PARAM <- list()
 PARAM$experimento_data <- "PP7230"
-PARAM$experimento_bayesiana <- "HT7240"
+PARAM$experimento_bayesiana <- "HT7340"
 
-PARAM$experimento <- "KA7251"
+PARAM$experimento <- "KA7250"
 
 
 #------------------------------------------------------------------------------
 # limita el uso de memoria RAM a  Total_hardware - GB_min
 
 action_limitar_memoria <- function( GB_min = 4 ) {
-
+  
   MemTotal <- as.numeric(system("awk '/MemTotal/ {print $2}' /proc/meminfo", intern=TRUE))
   MemTotal <- as.integer( MemTotal/ 1024 - GB_min*1024 )
   if( MemTotal < 0 )  action_abortar( " No hay suficiente RAM para trabajar (min 4GB ) " )
@@ -110,8 +110,8 @@ tb_importancia <- as.data.table(lgb.importance(modelo))
 archivo_importancia <- "impo.txt"
 
 fwrite(tb_importancia,
-  file = archivo_importancia,
-  sep = "\t"
+       file = archivo_importancia,
+       sep = "\t"
 )
 
 # grabo el modelo
@@ -135,8 +135,8 @@ tb_entrega[, prob := prediccion]
 
 # grabo las probabilidad del modelo
 fwrite(tb_entrega,
-  file = "prediccion.txt",
-  sep = "\t"
+       file = "prediccion.txt",
+       sep = "\t"
 )
 
 # Kaggle ----------------------------------------------------------------------
@@ -154,10 +154,10 @@ cortes <- seq(8000, 13000, by = 500)
 for (envios in cortes) {
   tb_entrega[, Predicted := 0L]
   tb_entrega[1:envios, Predicted := 1L]
-
+  
   fwrite(tb_entrega[, list(numero_de_cliente, Predicted)],
-    file = paste0(PARAM$experimento, "_", envios, ".csv"),
-    sep = ","
+         file = paste0(PARAM$experimento, "_", envios, ".csv"),
+         sep = ","
   )
 }
 

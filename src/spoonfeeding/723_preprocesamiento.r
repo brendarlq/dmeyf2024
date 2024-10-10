@@ -31,7 +31,7 @@ PARAM <- list()
 PARAM$experimento <- "PP7230"
 PARAM$input$dataset <- "./datasets/competencia_01_R.csv"
 PARAM$semilla_azar <- 315697 # Aqui poner su  primer  semilla
-PARAM$driftingcorreccion <- "estandarizar"
+PARAM$driftingcorreccion <- "ninguno"
 PARAM$clase_minoritaria <- c("BAJA+1","BAJA+2")
 PARAM$trainingstrategy$testing <- c(202104)
 PARAM$trainingstrategy$validation <- c(202104)
@@ -289,22 +289,13 @@ dir.create(paste0("./exp/", PARAM$experimento, "/"), showWarnings = FALSE)
 setwd(paste0("./exp/", PARAM$experimento, "/"))
 
 
-#1) Catastrophe Analysis  -------------------------------------------------------
-# corrijo las variables que con el script Catastrophe Analysis detecte que
-#   estaban rotas
-
 # ordeno dataset
 setorder(dataset, numero_de_cliente, foto_mes)
+# corrijo usando el metido MachineLearning
+Corregir_Rotas(dataset, "MachineLearning")
 
 
-##MICE en vez de corregir rotas
-cat("Inicio de imputación avanzada con MICE...\n")
-imputed_data <- mice(dataset, m = 5, method = 'pmm', maxit = 10, seed = 500)
-dataset <- complete(imputed_data)
-cat("Fin de imputación avanzada.\n")
-
-
-#2) Data Drifting  --------------------------------------------------------------
+# Data Drifting  --------------------------------------------------------------
 #  atencion que lo que mejor funciona
 #  no necesariamente es lo que usted espera
 
@@ -320,7 +311,6 @@ campos_monetarios <- colnames(dataset)
 campos_monetarios <- campos_monetarios[campos_monetarios %like%
                                          "^(m|Visa_m|Master_m|vm_m)"]
 
-# Ahora esta desactivado pero podría ser cualquiera de estos
 switch(PARAM$driftingcorreccion,
        "ninguno"        = cat("No hay correccion del data drifting"),
        "deflacion"      = drift_deflacion(campos_monetarios),
@@ -329,8 +319,6 @@ switch(PARAM$driftingcorreccion,
        "UVA"            = drift_UVA(campos_monetarios),
        "estandarizar"   = drift_estandarizar(campos_monetarios)
 )
-
-
 
 # 3.1) Feature Engineering Intra-mes Manual Artesanal  -----------------------------
 #  esta seccion es POCO importante
@@ -428,10 +416,6 @@ if (nans_qty > 0) {
   cat("Si no te gusta la decision, modifica a gusto el programa!\n\n")
   dataset[mapply(is.nan, dataset)] <- 0
 }
-
-##agregamos logaritmo de las variables monetarias para estabilizar la varianza
-monetary_vars <- c("Visa_mconsumototal", "Master_mconsumototal", "vm_mlimitecompra")
-dataset[, (monetary_vars) := lapply(.SD, function(x) log1p(x)), .SDcols = monetary_vars]
 
 
 # 3.2) Feature Engineering Historico  ----------------------------------------------

@@ -2,8 +2,6 @@
 #   8 vCPU
 # 32 GB memoria RAM, en la medida que no agregue mas campos
 
-#------------------------------------------------------------------------------
-#CONFIGURACION DEL ENTORNO
 # limpio la memoria
 rm(list = ls()) # remove all objects
 gc() # garbage collection
@@ -21,25 +19,34 @@ options(error = function() {
   stop("exiting after script error")
 })
 
-#------------------------------------------------------------------------------
-#DEFINICION DE PARAMETROS GLOBALES
 
 # defino los parametros de la corrida, en una lista, la variable global  PARAM
 #  muy pronto esto se leera desde un archivo formato .yaml
 PARAM <- list()
 
 PARAM$experimento <- "PP7230"
+
 PARAM$input$dataset <- "./datasets/competencia_01_R.csv"
+
 PARAM$semilla_azar <- 315697 # Aqui poner su  primer  semilla
+
+
 PARAM$driftingcorreccion <- "ninguno"
 PARAM$clase_minoritaria <- c("BAJA+1","BAJA+2")
+
+# los meses en los que vamos a entrenar
+#  la magia estara en experimentar exhaustivamente
 PARAM$trainingstrategy$testing <- c(202104)
 PARAM$trainingstrategy$validation <- c(202104)
-PARAM$trainingstrategy$training <- c(202103)
-PARAM$trainingstrategy$final_train <- c(202104)
+PARAM$trainingstrategy$training <- c(202102, 202103)
+
+
+PARAM$trainingstrategy$final_train <- c(202102, 202103, 202104)
 PARAM$trainingstrategy$future <- c(202106)
+
 # un undersampling de 0.1  toma solo el 10% de los CONTINUA
 PARAM$trainingstrategy$training_undersampling <- 1.0
+
 # esta aberracion fue creada a pedido de Joaquin Tschopp
 #  Publicamente Gustavo Denicolay NO se hace cargo de lo que suceda
 #   si se asigna un valor menor a 1.0
@@ -88,8 +95,6 @@ vUVA <- c(
 )
 
 #------------------------------------------------------------------------------
-# esta función interpola los valores de una columna (campo) específica en los meses indicados, 
-# usando un promedio de los valores anteriores y posteriores del cliente.
 
 Corregir_interpolar <- function(pcampo, pmeses) {
   
@@ -113,10 +118,6 @@ Corregir_interpolar <- function(pcampo, pmeses) {
 }
 #------------------------------------------------------------------------------
 
-
-# esta función asigna NA (valores faltantes) a una columna específica (pcampo) 
-# para las filas correspondientes a los meses indicados en pmeses, siempre y cuando la columna exista en el dataset.
-
 AsignarNA_campomeses <- function(pcampo, pmeses) {
   
   if( pcampo %in% colnames( dataset ) ) {
@@ -125,12 +126,6 @@ AsignarNA_campomeses <- function(pcampo, pmeses) {
   }
 }
 #------------------------------------------------------------------------------
-
-##Esta función verifica si el campo (pcampo) existe en el dataset. Si existe, según el método (pmetodo) elegido:
-
-# Utiliza "MachineLearning" para reemplazar valores por NA en ciertos meses.
-# Utiliza "EstadisticaClasica" para interpolar valores en los meses seleccionados. 
-# Devuelve 1 si el campo no existe, y 0 si todo se ejecuta correctamente.
 
 Corregir_atributo <- function(pcampo, pmeses, pmetodo)
 {
@@ -148,7 +143,6 @@ Corregir_atributo <- function(pcampo, pmeses, pmetodo)
 }
 #------------------------------------------------------------------------------
 
-##Corrige ciertos datos en base al método especificado
 Corregir_Rotas <- function(dataset, pmetodo) {
   gc()
   cat( "inicio Corregir_Rotas()\n")
@@ -172,16 +166,10 @@ Corregir_Rotas <- function(dataset, pmetodo) {
   Corregir_atributo("mtarjeta_master_descuentos",
                     c(202102), pmetodo)
   
-  Corregir_atributo("ccajas_depositos",
-                    c(202105), pmetodo)
-  
   cat( "fin Corregir_rotas()\n")
 }
 #------------------------------------------------------------------------------
 
-
-# Esta función ajusta los valores monetarios en un conjunto de columnas (campos_monetarios) 
-# según la variación del índice UVA (Unidad de Valor Adquisitivo).
 drift_UVA <- function(campos_monetarios) {
   cat( "inicio drift_UVA()\n")
   
@@ -194,8 +182,6 @@ drift_UVA <- function(campos_monetarios) {
   cat( "fin drift_UVA()\n")
 }
 #------------------------------------------------------------------------------
-
-# Ajusta los valores monetarios en las columnas (campos_monetarios) según el valor del dólar oficial.
 
 drift_dolar_oficial <- function(campos_monetarios) {
   cat( "inicio drift_dolar_oficial()\n")
@@ -210,7 +196,6 @@ drift_dolar_oficial <- function(campos_monetarios) {
 }
 #------------------------------------------------------------------------------
 
-# Similar a la función anterior, pero en este caso ajusta los valores monetarios según el valor del dólar blue.
 drift_dolar_blue <- function(campos_monetarios) {
   cat( "inicio drift_dolar_blue()\n")
   
@@ -223,7 +208,7 @@ drift_dolar_blue <- function(campos_monetarios) {
   cat( "fin drift_dolar_blue()\n")
 }
 #------------------------------------------------------------------------------
-# Ajusta los valores monetarios en las columnas (campos_monetarios) según la inflación, utilizando el Índice de Precios al Consumidor (IPC).
+
 drift_deflacion <- function(campos_monetarios) {
   cat( "inicio drift_deflacion()\n")
   
@@ -236,7 +221,7 @@ drift_deflacion <- function(campos_monetarios) {
   cat( "fin drift_deflacion()\n")
 }
 #------------------------------------------------------------------------------
-# drift_estandarizar transforma los valores de las columnas seleccionadas en una escala estándar (media 0, desviación estándar 1) dentro de cada mes
+
 drift_estandarizar <- function(campos_drift) {
   
   cat( "inicio drift_estandarizar()\n")
@@ -289,6 +274,10 @@ dir.create(paste0("./exp/", PARAM$experimento, "/"), showWarnings = FALSE)
 setwd(paste0("./exp/", PARAM$experimento, "/"))
 
 
+# Catastrophe Analysis  -------------------------------------------------------
+# corrijo las variables que con el script Catastrophe Analysis detecte que
+#   eestaban rotas
+
 # ordeno dataset
 setorder(dataset, numero_de_cliente, foto_mes)
 # corrijo usando el metido MachineLearning
@@ -320,7 +309,9 @@ switch(PARAM$driftingcorreccion,
        "estandarizar"   = drift_estandarizar(campos_monetarios)
 )
 
-# 3.1) Feature Engineering Intra-mes Manual Artesanal  -----------------------------
+
+
+# Feature Engineering Intra-mes Manual Artesanal  -----------------------------
 #  esta seccion es POCO importante
 # el mes 1,2, ..12
 dataset[, kmes := foto_mes %% 100]
@@ -418,7 +409,8 @@ if (nans_qty > 0) {
 }
 
 
-# 3.2) Feature Engineering Historico  ----------------------------------------------
+
+# Feature Engineering Historico  ----------------------------------------------
 #   aqui deben calcularse los  lags y  lag_delta
 #   Sin lags no hay paraiso !  corta la bocha
 
@@ -444,9 +436,10 @@ for (lag_order in 1:max_lag) {
   }
 }
 
+# Eliminar las columnas cprestamos_personales y mprestamos_personales
+dataset[, c("cprestamos_personales", "mprestamos_personales") := NULL]
 
-
-# 4) Training Strategy  ----------------------------------------------
+# Training Strategy  ----------------------------------------------
 
 dataset[, part_future := 0L ]
 dataset[ foto_mes %in% PARAM$trainingstrategy$future,

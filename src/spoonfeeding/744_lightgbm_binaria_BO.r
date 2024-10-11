@@ -43,12 +43,12 @@ PARAM <- list()
 PARAM$experimento_data <- "PP7230"
 PARAM$experimento <- "HT7440"
 
-PARAM$semilla_azar <- c(270143, 908581, 950221, 315697, 481549)
+PARAM$semilla_azar <- c(315697)
  # Aqui poner su  primer  semilla
 
 # por ahora 1 para que no me llueva una catarata de preguntas de alumnos
 #  justo antes del cierre de la primera competencia
-PARAM$semillas_cantidad <- 5
+PARAM$semillas_cantidad <- 1
 
 PARAM$hyperparametertuning$POS_ganancia <- 273000
 PARAM$hyperparametertuning$NEG_ganancia <- -7000

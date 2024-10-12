@@ -31,17 +31,17 @@ PARAM$input$dataset <- "./datasets/competencia_01_R.csv"
 PARAM$semilla_azar <- 315697 # Aqui poner su  primer  semilla
 
 
-PARAM$driftingcorreccion <- "ninguno"
+PARAM$driftingcorreccion <- "estandarizar"
 PARAM$clase_minoritaria <- c("BAJA+1","BAJA+2")
 
 # los meses en los que vamos a entrenar
 #  la magia estara en experimentar exhaustivamente
 PARAM$trainingstrategy$testing <- c(202104)
 PARAM$trainingstrategy$validation <- c(202104)
-PARAM$trainingstrategy$training <- c(202103)
+PARAM$trainingstrategy$training <- c(202102, 202103)
 
 
-PARAM$trainingstrategy$final_train <- c(202103, 202104)
+PARAM$trainingstrategy$final_train <- c(202102,202103, 202104)
 PARAM$trainingstrategy$future <- c(202106)
 
 # un undersampling de 0.1  toma solo el 10% de los CONTINUA
@@ -355,8 +355,8 @@ dataset[, mpayroll_sobre_edad := mpayroll / cliente_edad]
 #dataset[, vm_cconsumos := rowSums(cbind(Master_cconsumos, Visa_cconsumos), na.rm = TRUE)]
 #dataset[, vm_cadelantosefectivo := rowSums(cbind(Master_cadelantosefectivo, Visa_cadelantosefectivo), na.rm = TRUE)]
 #dataset[, vm_mpagominimo := rowSums(cbind(Master_mpagominimo, Visa_mpagominimo), na.rm = TRUE)]
-#dataset[, vmr_Master_mlimitecompra := Master_mlimitecompra / vm_mlimitecompra]
-#dataset[, vmr_Visa_mlimitecompra := Visa_mlimitecompra / vm_mlimitecompra]
+dataset[, vmr_Master_mlimitecompra := Master_mlimitecompra / vm_mlimitecompra]
+dataset[, vmr_Visa_mlimitecompra := Visa_mlimitecompra / vm_mlimitecompra]
 #dataset[, vmr_msaldototal := vm_msaldototal / vm_mlimitecompra]
 #dataset[, vmr_msaldopesos := vm_msaldopesos / vm_mlimitecompra]
 #dataset[, vmr_msaldopesos2 := vm_msaldopesos / vm_msaldototal]
@@ -371,6 +371,15 @@ dataset[, mpayroll_sobre_edad := mpayroll / cliente_edad]
 #dataset[, vmr_mpagosdolares := vm_mpagosdolares / vm_mlimitecompra]
 #dataset[, vmr_mconsumototal := vm_mconsumototal / vm_mlimitecompra]
 #dataset[, vmr_mpagominimo := vm_mpagominimo / vm_mlimitecompra]
+
+# Calculo de nuevas variables con los límites de compra correctos
+dataset[, consumo_tarjeta_credito := mtarjeta_visa_consumo + mtarjeta_master_consumo]
+
+# CONSUMO SOBRE LÍMITE: (mtarjeta_visa_consumo + mtarjeta_master_consumo) / (Visa_mlimitecompra + Master_mlimitecompra)
+dataset[, consumo_sobre_limite := ifelse(
+  (Visa_mlimitecompra + Master_mlimitecompra) > 0, 
+  (mtarjeta_visa_consumo + mtarjeta_master_consumo) / (Visa_mlimitecompra + Master_mlimitecompra), 
+  0)]
 
 # valvula de seguridad para evitar valores infinitos
 # paso los infinitos a NULOS

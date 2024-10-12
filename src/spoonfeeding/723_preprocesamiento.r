@@ -372,6 +372,30 @@ dataset[, mpayroll_sobre_edad := mpayroll / cliente_edad]
 #dataset[, vmr_mconsumototal := vm_mconsumototal / vm_mlimitecompra]
 #dataset[, vmr_mpagominimo := vm_mpagominimo / vm_mlimitecompra]
 
+# Agregar las variables recomendadas al dataset
+
+# 1. vm_mlimitecompra: Suma del límite de compra de Visa y MasterCard
+dataset[, vm_mlimitecompra := rowSums(cbind(Master_mlimitecompra, Visa_mlimitecompra), na.rm = TRUE)]
+
+# 2. vm_msaldototal: Suma del saldo total de Visa y MasterCard
+dataset[, vm_msaldototal := rowSums(cbind(Master_msaldototal, Visa_msaldototal), na.rm = TRUE)]
+
+# 3. vmr_msaldototal: Relación del saldo total con el límite de compra
+dataset[, vmr_msaldototal := vm_msaldototal / vm_mlimitecompra]
+
+# 4. vmr_mconsumototal: Relación del consumo total con el límite de compra
+dataset[, vmr_mconsumototal := vm_mconsumototal / vm_mlimitecompra]
+
+# 5. vm_mconsumototal: Suma de los consumos totales de Visa y MasterCard
+dataset[, vm_mconsumototal := rowSums(cbind(Master_mconsumototal, Visa_mconsumototal), na.rm = TRUE)]
+
+# 6. vm_Fvencimiento: Fecha de vencimiento mínima entre Visa y MasterCard
+dataset[, vm_Fvencimiento := pmin(Master_Fvencimiento, Visa_Fvencimiento, na.rm = TRUE)]
+
+# 7. vmr_mpagominimo: Relación de los pagos mínimos con el límite de compra
+dataset[, vmr_mpagominimo := vm_mpagominimo / vm_mlimitecompra]
+
+
 # valvula de seguridad para evitar valores infinitos
 # paso los infinitos a NULOS
 infinitos <- lapply(

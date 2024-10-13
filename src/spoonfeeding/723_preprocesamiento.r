@@ -41,7 +41,7 @@ PARAM$trainingstrategy$validation <- c(202104)
 PARAM$trainingstrategy$training <- c(202102, 202103)
 
 
-PARAM$trainingstrategy$final_train <- c(202102, 202103, 202104)
+PARAM$trainingstrategy$final_train <- c(202102,202103, 202104)
 PARAM$trainingstrategy$future <- c(202106)
 
 # un undersampling de 0.1  toma solo el 10% de los CONTINUA
@@ -371,6 +371,15 @@ dataset[, vmr_mpagospesos := vm_mpagospesos / vm_mlimitecompra]
 dataset[, vmr_mpagosdolares := vm_mpagosdolares / vm_mlimitecompra]
 dataset[, vmr_mconsumototal := vm_mconsumototal / vm_mlimitecompra]
 dataset[, vmr_mpagominimo := vm_mpagominimo / vm_mlimitecompra]
+
+
+# CONSUMO SOBRE LÍMITE: (mtarjeta_visa_consumo + mtarjeta_master_consumo) / (Visa_mlimitecompra + Master_mlimitecompra)
+dataset[, consumo_sobre_limite := ifelse(
+  (Visa_mlimitecompra + Master_mlimitecompra) > 0, 
+  (mtarjeta_visa_consumo + mtarjeta_master_consumo) / (Visa_mlimitecompra + Master_mlimitecompra), 
+  0)]
+
+dataset[, consumo_tarjeta_credito := mtarjeta_visa_consumo + mtarjeta_master_consumo]
 
 
 # valvula de seguridad para evitar valores infinitos

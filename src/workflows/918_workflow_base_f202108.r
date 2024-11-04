@@ -439,7 +439,7 @@ wf_agosto <- function( pnombrewf )
   #  mtry_ratio= 0.2
   #)
 
-  CN_canaritos_asesinos_base(ratio=0.5, desvio=0)
+  CN_canaritos_asesinos_base(ratio=0.5, desvio=4)
 
   # Etapas modelado
   ts8 <- TS_strategy_base8()

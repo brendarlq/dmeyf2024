@@ -420,7 +420,7 @@ KA_evaluate_kaggle <- function( pinputexps )
 # Este es el  Workflow Baseline
 # Que predice 202108 donde NO conozco la clase
 
-wf_agosto <- function( pnombrewf )
+wf_agosto_catastrophe <- function( pnombrewf )
 {
   param_local <- exp_wf_init( pnombrewf ) # linea workflow inicial fija
 
@@ -428,16 +428,16 @@ wf_agosto <- function( pnombrewf )
   DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_R.csv.gz")
 
   # Etapas preprocesamiento
-  CA_catastrophe_base( metodo="Ninguno")
-  #FEintra_manual_base()
+  CA_catastrophe_base( metodo="MachineLearning")
+  FEintra_manual_base()
   DR_drifting_base(metodo="rank_cero_fijo")
   FEhist_base()
 
-  #FErf_attributes_base( arbolitos= 20,
-  #  hojas_por_arbol= 16,
-  #  datos_por_hoja= 1000,
-  #  mtry_ratio= 0.2
-  #)
+  FErf_attributes_base( arbolitos= 20,
+    hojas_por_arbol= 16,
+    datos_por_hoja= 1000,
+    mtry_ratio= 0.2
+  )
 
   CN_canaritos_asesinos_base(ratio=0.5, desvio=1.0)
 
@@ -457,5 +457,5 @@ wf_agosto <- function( pnombrewf )
 # Aqui comienza el programa
 
 # llamo al workflow con future = 202108
-wf_agosto()
+wf_agosto_catastrophe()
 

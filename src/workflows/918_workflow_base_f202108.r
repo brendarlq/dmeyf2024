@@ -425,7 +425,7 @@ wf_agosto <- function( pnombrewf )
   param_local <- exp_wf_init( pnombrewf ) # linea workflow inicial fija
 
   # Etapa especificacion dataset de la Segunda Competencia Kaggle
-  DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_R.csv.gz")
+  DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_ternaria.csv.gz")
 
   # Etapas preprocesamiento
   CA_catastrophe_base( metodo="MachineLearning")
@@ -439,7 +439,7 @@ wf_agosto <- function( pnombrewf )
     mtry_ratio= 0.2
   )
 
-  CN_canaritos_asesinos_base(ratio=0.2, desvio=-3)
+  CN_canaritos_asesinos_base(ratio=0.6, desvio=-2)
 
   # Etapas modelado
   ts8 <- TS_strategy_base8()

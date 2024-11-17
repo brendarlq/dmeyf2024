@@ -39,3 +39,8 @@ orden <- order(probabilidades, decreasing = TRUE)
 # Mostrar resultados
 cat("Orden de las candidatas: ", paste(names(candidatas)[orden], collapse = " < "), "\n")
 print(probabilidades)
+
+# Este sería el resultado de la corrida de este script
+# Orden de las candidatas:  C2 < C1 < C5 < C4 < C3 
+# C1         C2         C3         C4         C5 
+# 0.69618784 0.80000000 0.02091216 0.16572493 0.31695794 

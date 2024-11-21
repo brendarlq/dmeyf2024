@@ -54,12 +54,12 @@ tabla_base_modelos <- data.frame(
     "W-CN-0.2-MAS-1", "W-CN-0.6-MENOS-2", "W-CN-0.8-MENOS-2", "W-CN-1-MENOS-2"
   ),
   Cantidad_columnas = c(
-    246, 216, 1116, 440, 392, 
-    188, 242, 352, 220, 319, 
-    402, 172, 145, 171, 
-    281, 170, 279, 189, 
-    62, 293, 427, 56, 
-    239, 41, 46, 20
+    246.0, 216.0, 1116.0, 440.0, 392.0, 
+    188.0, 242.0, 352.0, 220.0, 319.0, 
+    402.0, 172.0, 145.0, 171.0, 
+    281.0, 170.0, 279.0, 189.0, 
+    62.0, 293.0, 427.0, 56.0, 
+    239.0, 41.0, 46.0, 20.0
   )
 )
 
@@ -159,7 +159,7 @@ orden_modelos <- df_resultados %>%
 # Reordenar el factor 'modelo' en el dataframe
 df_resultados$modelo <- factor(df_resultados$modelo, levels = orden_modelos)
 
-# Crear el gráfico de barras con mejoras visuales
+# Crear el gráfico de barras original
 grafico_barras_columnas <- ggplot(df_resultados, aes(x = modelo, y = Cantidad_columnas)) +
   geom_bar(stat = "identity", fill = "steelblue", color = NA, width = 0.7) +  # Barras sin bordes
   geom_text(aes(label = Cantidad_columnas), vjust = -0.5, size = 3.5, fontface = "bold") +  # Etiquetas claras
@@ -173,10 +173,11 @@ grafico_barras_columnas <- ggplot(df_resultados, aes(x = modelo, y = Cantidad_co
     axis.text.x = element_text(angle = 45, hjust = 1, size = 10),  # Rotar y ajustar tamaño de etiquetas en eje X
     plot.title = element_text(hjust = 0.5, face = "bold", size = 14),  # Título centrado y resaltado
     axis.title = element_text(size = 12)  # Tamaño mayor para los títulos de los ejes
-  ) +
-  expand_limits(y = max(df_resultados$Cantidad_columnas) * 1.1)  # Espacio extra para las etiquetas
+  )
 
 # Mostrar el gráfico
 print(grafico_barras_columnas)
+
+
 
 

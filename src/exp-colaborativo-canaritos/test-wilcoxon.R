@@ -43,6 +43,43 @@ for (subfolder in subfolders) {
 # Combinar todos los dataframes en un único dataframe
 df_resultados <- bind_rows(data_list)
 
+# Crear la tabla base con los nombres de los modelos y la cantidad de columnas
+tabla_base_modelos <- data.frame(
+  modelo = c(
+    "W-CN-1-0", "W-CN-0.6-0", "W-SIN-CN", "W-CN-0.8-MAS-2", "W-CN-0.4-MAS-2", 
+    "W-CN-0.2-0", "W-CN-0.8-0", "W-CN-1-MAS-1", "W-CN-0.4-0", "W-CN-0.2-MAS-2", 
+    "W-CN-0.6-MAS-2", "W-CN-0.4-MENOS-1", "W-CN-0.2-MENOS-1", "W-CN-1-MENOS-1", 
+    "W-CN-0.6-MAS-1", "W-CN-0.6-MENOS-1", "W-CN-0.4-MAS-1", "W-CN-0.8-MENOS-1", 
+    "W-CN-0.2-MENOS-2", "W-CN-0.8-MAS-1", "W-CN-1-MAS-2", "W-CN-0.4-MENOS-2", 
+    "W-CN-0.2-MAS-1", "W-CN-0.6-MENOS-2", "W-CN-0.8-MENOS-2", "W-CN-1-MENOS-2"
+  ),
+  Cantidad_columnas = c(
+    246, 216, 1116, 440, 392, 
+    188, 242, 352, 220, 319, 
+    402, 172, 145, 171, 
+    281, 170, 279, 189, 
+    62, 293, 427, 56, 
+    239, 41, 46, 20
+  )
+)
+
+# Agregar la cantidad de columnas al dataframe original de modelos
+df_resultados <- df_resultados %>%
+  left_join(tabla_base_modelos, by = "modelo")
+
+# Mostrar la tabla enriquecida
+print(df_resultados)
+
+# Ordenar los modelos por la mediana de las ganancias
+df_resultados$modelo <- factor(
+  df_resultados$modelo,
+  levels = df_resultados %>%
+    group_by(modelo) %>%
+    summarise(mediana_ganancia = median(ganancia, na.rm = TRUE)) %>%
+    arrange(desc(mediana_ganancia)) %>%
+    pull(modelo)
+)
+
 # Realizar el test de Wilcoxon entre todos los modelos
 test_wilcoxon <- pairwise.wilcox.test(df_resultados$ganancia, df_resultados$modelo, p.adjust.method = "bonferroni")
 
@@ -67,15 +104,15 @@ print(tabla_comparaciones_completa)
 # Guardar la tabla como archivo CSV
 write.csv(tabla_comparaciones_completa, "tabla_comparaciones_completa.csv", row.names = FALSE)
 
-# Crear boxplots de las ganancias
+# Crear boxplots de las ganancias ordenados
 grafico_boxplots <- ggplot(data = df_resultados, aes(x = modelo, y = ganancia)) +
   stat_boxplot(geom = "errorbar") +  # Mostrar barras de error
   geom_boxplot(outlier.shape = NA) +  # Boxplot sin outliers visibles
   theme_bw() +
   geom_jitter(color = "red", width = 0.1, size = 2, alpha = 0.6) +  # Mostrar puntos originales en rojo
   labs(
-    title = "Comparación de Ganancias por Modelo",
-    x = "Modelo",
+    title = "Comparación de Ganancias por Modelo (Ordenados)",
+    x = "Modelo (Ordenado por Mediana)",
     y = "Ganancia"
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotar etiquetas del eje X
@@ -93,13 +130,13 @@ comparar_modelo_especifico <- function(test_wilcoxon, modelo_seleccionado) {
   tabla_comparaciones <- as.data.frame(as.table(test_wilcoxon$p.value)) %>%
     filter(!is.na(Freq)) %>%  # Remover valores NA
     rename(modelo1 = Var1, modelo2 = Var2, p_valor = Freq) %>%  # Renombrar columnas
-    filter(modelo1 == modelo_seleccionado | modelo2 == modelo_seleccionado) %>%  # Filtrar por el modelo seleccionado
+    filter(modelo1 == modelo_seleccionado | modelo2 == modelo_seleccionado) %>%  # Filtrar comparaciones con el modelo seleccionado
     mutate(significativo = ifelse(p_valor < 0.05, "Sí", "No"))  # Agregar columna de significancia
   return(tabla_comparaciones)
 }
 
 # Modelo a comparar (puedes cambiar este valor para seleccionar otro modelo)
-modelo_a_comparar <- "W-CN-1-0"
+modelo_a_comparar <- "W-CN-0.8-MAS-2"
 
 # Generar tabla de comparaciones para el modelo seleccionado
 tabla_modelo_seleccionado <- comparar_modelo_especifico(test_wilcoxon, modelo_a_comparar)
@@ -108,5 +145,38 @@ tabla_modelo_seleccionado <- comparar_modelo_especifico(test_wilcoxon, modelo_a_
 print(paste("Comparaciones para el modelo:", modelo_a_comparar))
 print(tabla_modelo_seleccionado)
 
+
 # Guardar la tabla como archivo CSV
 write.csv(tabla_modelo_seleccionado, paste0("comparaciones_", modelo_a_comparar, ".csv"), row.names = FALSE)
+
+# Ordenar los niveles de los modelos por la mediana de las ganancias
+orden_modelos <- df_resultados %>%
+  group_by(modelo) %>%
+  summarise(mediana_ganancia = median(ganancia, na.rm = TRUE)) %>%
+  arrange(desc(mediana_ganancia)) %>%
+  pull(modelo)
+
+# Reordenar el factor 'modelo' en el dataframe
+df_resultados$modelo <- factor(df_resultados$modelo, levels = orden_modelos)
+
+# Crear el gráfico de barras con mejoras visuales
+grafico_barras_columnas <- ggplot(df_resultados, aes(x = modelo, y = Cantidad_columnas)) +
+  geom_bar(stat = "identity", fill = "steelblue", color = NA, width = 0.7) +  # Barras sin bordes
+  geom_text(aes(label = Cantidad_columnas), vjust = -0.5, size = 3.5, fontface = "bold") +  # Etiquetas claras
+  labs(
+    title = "Cantidad de columnas luego de los canaritos por Modelo",
+    x = "Modelo",
+    y = "Cantidad de Columnas"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),  # Rotar y ajustar tamaño de etiquetas en eje X
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),  # Título centrado y resaltado
+    axis.title = element_text(size = 12)  # Tamaño mayor para los títulos de los ejes
+  ) +
+  expand_limits(y = max(df_resultados$Cantidad_columnas) * 1.1)  # Espacio extra para las etiquetas
+
+# Mostrar el gráfico
+print(grafico_barras_columnas)
+
+

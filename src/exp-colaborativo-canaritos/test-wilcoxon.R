@@ -109,7 +109,7 @@ grafico_boxplots <- ggplot(data = df_resultados, aes(x = modelo, y = ganancia)) 
   stat_boxplot(geom = "errorbar") +  # Mostrar barras de error
   geom_boxplot(outlier.shape = NA) +  # Boxplot sin outliers visibles
   theme_bw() +
-  geom_jitter(color = "red", width = 0.1, size = 2, alpha = 0.6) +  # Mostrar puntos originales en rojo
+  geom_jitter(color = "darkgreen", width = 0.1, size = 1, alpha = 0.6) +  # Mostrar puntos originales en rojo
   labs(
     title = "Comparación de Ganancias por Modelo (Ordenados)",
     x = "Modelo (Ordenado por Mediana)",
@@ -159,24 +159,37 @@ orden_modelos <- df_resultados %>%
 # Reordenar el factor 'modelo' en el dataframe
 df_resultados$modelo <- factor(df_resultados$modelo, levels = orden_modelos)
 
-# Crear el gráfico de barras original
-grafico_barras_columnas <- ggplot(df_resultados, aes(x = modelo, y = Cantidad_columnas)) +
-  geom_bar(stat = "identity", fill = "steelblue", color = NA, width = 0.7) +  # Barras sin bordes
-  geom_text(aes(label = Cantidad_columnas), vjust = -0.5, size = 3.5, fontface = "bold") +  # Etiquetas claras
+# Crear un nuevo dataframe con valores únicos por modelo
+df_modelos_final <- df_resultados %>%
+  select(modelo, Cantidad_columnas) %>%
+  distinct()  # Eliminar duplicados
+
+# Crear el gráfico de barras con el nuevo dataframe
+grafico_barras_columnas <- ggplot(df_modelos_final, aes(x = modelo, y = Cantidad_columnas)) +
+  geom_bar(stat = "identity", fill = "darkgreen", color = NA, width = 0.7) +  # Barras sólidas
+  geom_text(aes(label = Cantidad_columnas), vjust = -0.5, size = 3.5, fontface = "bold") +  # Añadir etiquetas
   labs(
     title = "Cantidad de columnas luego de los canaritos por Modelo",
     x = "Modelo",
     y = "Cantidad de Columnas"
   ) +
+  scale_y_continuous(
+    breaks = seq(0, max(df_modelos_final$Cantidad_columnas, na.rm = TRUE), by = 100),  # Ajustar los cortes del eje Y
+    limits = c(0, max(df_modelos_final$Cantidad_columnas, na.rm = TRUE) + 50)  # Límite superior ajustado
+  ) +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),  # Rotar y ajustar tamaño de etiquetas en eje X
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),  # Título centrado y resaltado
-    axis.title = element_text(size = 12)  # Tamaño mayor para los títulos de los ejes
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),  # Rotar etiquetas del eje X
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),  # Centrar y resaltar el título
+    axis.title = element_text(size = 12)  # Ajustar tamaño de títulos de ejes
   )
 
 # Mostrar el gráfico
 print(grafico_barras_columnas)
+
+
+
+
 
 
 

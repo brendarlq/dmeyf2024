@@ -19,7 +19,7 @@ envg$EXPENV$repo_dir <- "~/dmeyf2024/"
 envg$EXPENV$datasets_dir <- "~/buckets/b1/datasets/"
 envg$EXPENV$messenger <- "~/install/zulip_enviar.sh"
 
-envg$EXPENV$semilla_primigenia <- 111119
+envg$EXPENV$semilla_primigenia <- 315697
 
 # leo el unico parametro del script
 args <- commandArgs(trailingOnly=TRUE)
@@ -257,33 +257,33 @@ CN_canaritos_asesinos_base <- function( pinputexps, ratio, desvio)
 # Training Strategy  Baseline
 #  azaroso, utiliza semilla
 
-TS_strategy_base8 <- function( pinputexps )
-{
-  if( -1 == (param_local <- exp_init())$resultado ) return( 0 )# linea fija
-
-  param_local$meta$script <- "/src/wf-etapas/z2101_TS_training_strategy.r"
-
-  param_local$future <- c(202108)
-
-  param_local$final_train$undersampling <- 1.0
-  param_local$final_train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
-  param_local$final_train$training <- c(202106, 202105, 202104,
-    202103, 202102, 202101)
-
-
-  param_local$train$training <- c(202104, 202103, 202102,
-    202101, 202012, 202011)
-  param_local$train$validation <- c(202105)
-  param_local$train$testing <- c(202106)
-
-
-  # Atencion  0.2  de  undersampling de la clase mayoritaria,  los CONTINUA
-  # 1.0 significa NO undersampling
-  param_local$train$undersampling <- 0.2
-  param_local$train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
-
-  return( exp_correr_script( param_local ) ) # linea fija
-}
+# TS_strategy_base8 <- function( pinputexps )
+# {
+#   if( -1 == (param_local <- exp_init())$resultado ) return( 0 )# linea fija
+# 
+#   param_local$meta$script <- "/src/wf-etapas/z2101_TS_training_strategy.r"
+# 
+#   param_local$future <- c(202108)
+# 
+#   param_local$final_train$undersampling <- 1.0
+#   param_local$final_train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
+#   param_local$final_train$training <- c(202106, 202105, 202104,
+#     202103, 202102, 202101)
+# 
+# 
+#   param_local$train$training <- c(202104, 202103, 202102,
+#     202101, 202012, 202011)
+#   param_local$train$validation <- c(202105)
+#   param_local$train$testing <- c(202106)
+# 
+# 
+#   # Atencion  0.2  de  undersampling de la clase mayoritaria,  los CONTINUA
+#   # 1.0 significa NO undersampling
+#   param_local$train$undersampling <- 0.2
+#   param_local$train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
+# 
+#   return( exp_correr_script( param_local ) ) # linea fija
+# }
 #------------------------------------------------------------------------------
 # Atencion, el undersampling es de 0.02
 #  tanto para entrenamineto como para  Final train$clase01_valor1
@@ -302,7 +302,9 @@ TS_strategy_base8 <- function( pinputexps )
     202106, 202105, 202104, 202103, 202102, 202101, 
     202012, 202011, 202010, 202009, 202008, 202007, 
     # 202006  Excluyo por variables rotas
-    202005, 202004, 202003, 202002, 202001,
+    202005, 
+    #202004, 202003, 
+    202002, 202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,
@@ -318,7 +320,9 @@ TS_strategy_base8 <- function( pinputexps )
     202104, 202103, 202102, 202101, 
     202012, 202011, 202010, 202009, 202008, 202007, 
     # 202006  Excluyo por variables rotas
-    202005, 202004, 202003, 202002, 202001,
+    202005, 
+    #202004, 202003, 
+    202002, 202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,
@@ -481,14 +485,19 @@ wf_SEMI_ago_orden227 <- function( pnombrewf )
   param_local <- exp_wf_init( pnombrewf ) # linea fija
 
   # Etapa especificacion dataset de la Segunda Competencia Kaggle
-  DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_julia.csv")
+  DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_R.csv")
 
   CA_catastrophe_base( metodo="MachineLearning")
   FEintra_manual_base()
   DR_drifting_base(metodo="rank_cero_fijo")
   FEhist_base()
-  ultimo <- FErf_attributes_base()
-  #CN_canaritos_asesinos_base(ratio=1, desvio=0)
+  ultimo <- FErf_attributes_base( arbolitos= 25,
+                                  hojas_por_arbol= 16,
+                                  datos_por_hoja= 1000,
+                                  mtry_ratio= 0.2
+  )
+  
+  CN_canaritos_asesinos_base(ratio=0.6, desvio=0)
 
   ts8 <- TS_strategy_base8()
 

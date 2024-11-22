@@ -485,12 +485,8 @@ wf_SEMI_ago_orden227 <- function( pnombrewf )
   param_local <- exp_wf_init( pnombrewf ) # linea fija
 
   # Etapa especificacion dataset de la Segunda Competencia Kaggle
-<<<<<<< Updated upstream
-  DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_R.csv")
-=======
   DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_R.csv.gz")
->>>>>>> Stashed changes
-
+  
   CA_catastrophe_base( metodo="MachineLearning")
   FEintra_manual_base()
   DR_drifting_base(metodo="rank_cero_fijo")

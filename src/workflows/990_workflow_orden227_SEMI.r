@@ -183,7 +183,7 @@ FErf_attributes_base <- function( pinputexps, ratio, desvio)
   # parametros para que LightGBM se comporte como Random Forest
   param_local$lgb_param <- list(
     # parametros que se pueden cambiar
-    num_iterations = 20,
+    num_iterations = 25,
     num_leaves  = 16,
     min_data_in_leaf = 1000,
     feature_fraction_bynode  = 0.2,
@@ -303,7 +303,7 @@ TS_strategy_base8 <- function( pinputexps )
     202012, 202011, 202010, 202009, 202008, 202007, 
     # 202006  Excluyo por variables rotas
     202005, 
-    #202004, 202003, 
+    # 202004, 202003, 
     202002, 202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
@@ -321,7 +321,7 @@ TS_strategy_base8 <- function( pinputexps )
     202012, 202011, 202010, 202009, 202008, 202007, 
     # 202006  Excluyo por variables rotas
     202005, 
-    #202004, 202003, 
+    # 202004, 202003, 
     202002, 202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
@@ -485,17 +485,13 @@ wf_SEMI_ago_orden227 <- function( pnombrewf )
   param_local <- exp_wf_init( pnombrewf ) # linea fija
 
   # Etapa especificacion dataset de la Segunda Competencia Kaggle
-  DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_R.csv.gz")
-  
+  DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_02_julia.csv")
+   
   CA_catastrophe_base( metodo="MachineLearning")
   FEintra_manual_base()
   DR_drifting_base(metodo="rank_cero_fijo")
   FEhist_base()
-  ultimo <- FErf_attributes_base( arbolitos= 25,
-                                  hojas_por_arbol= 16,
-                                  datos_por_hoja= 1000,
-                                  mtry_ratio= 0.2
-  )
+  ultimo <- FErf_attributes_base()
   
   CN_canaritos_asesinos_base(ratio=0.6, desvio=0)
 

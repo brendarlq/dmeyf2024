@@ -310,7 +310,8 @@ TS_strategy_base8 <- function( pinputexps )
     202006, 
     202005, 
     # 202004, 202003, 
-    202002, 202001,
+    202002, 
+    # 202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,
@@ -333,7 +334,8 @@ TS_strategy_base8 <- function( pinputexps )
     202006, 
     202005, 
     # 202004, 202003, 
-    202002, 202001,
+    202002, 
+    # 202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,
@@ -491,7 +493,7 @@ KA_evaluate_kaggle_semillerio <- function( pinputexps )
 # Que predice 202107 donde conozco la clase
 # y ya genera graficos
 
-wf_SEMI_ago_orden5 <- function( pnombrewf )
+wf_SEMI_ago_orden6 <- function( pnombrewf )
 {
   param_local <- exp_wf_init( pnombrewf ) # linea fija
 
@@ -500,7 +502,7 @@ wf_SEMI_ago_orden5 <- function( pnombrewf )
    
   CA_catastrophe_base( metodo="MachineLearning")
   FEintra_manual_base()
-  DR_drifting_base(metodo="rank_cero_fijo")
+  DR_drifting_base(metodo="deflacion")
   FEhist_base()
   ultimo <- FErf_attributes_base()
   
@@ -533,6 +535,6 @@ wf_SEMI_ago_orden5 <- function( pnombrewf )
 # Aqui comienza el programa
 
 # llamo al workflow con future = 202108
-wf_SEMI_ago_orden5()
+wf_SEMI_ago_orden6()
 
 

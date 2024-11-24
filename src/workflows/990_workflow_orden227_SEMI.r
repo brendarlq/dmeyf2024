@@ -142,11 +142,11 @@ FEhist_base <- function( pinputexps)
 
   # no me engraso las manos con las tendencias
   param_local$Tendencias1$run <- TRUE  # FALSE, no corre nada de lo que sigue
-  param_local$Tendencias1$ventana <- 8
+  param_local$Tendencias1$ventana <- 6
   param_local$Tendencias1$tendencia <- TRUE
   param_local$Tendencias1$minimo <- FALSE
   param_local$Tendencias1$maximo <- FALSE
-  param_local$Tendencias1$promedio <- FALSE
+  param_local$Tendencias1$promedio <- TRUE
   param_local$Tendencias1$ratioavg <- FALSE
   param_local$Tendencias1$ratiomax <- FALSE
 
@@ -156,7 +156,7 @@ FEhist_base <- function( pinputexps)
   param_local$Tendencias2$tendencia <- TRUE
   param_local$Tendencias2$minimo <- FALSE
   param_local$Tendencias2$maximo <- FALSE
-  param_local$Tendencias2$promedio <- FALSE
+  param_local$Tendencias2$promedio <- TRUE
   param_local$Tendencias2$ratioavg <- FALSE
   param_local$Tendencias2$ratiomax <- FALSE
 
@@ -500,7 +500,7 @@ wf_SEMI_ago_orden4 <- function( pnombrewf )
    
   CA_catastrophe_base( metodo="MachineLearning")
   FEintra_manual_base()
-  DR_drifting_base(metodo="rank_cero_fijo")
+  DR_drifting_base(metodo="deflacion")
   FEhist_base()
   ultimo <- FErf_attributes_base()
   

@@ -142,7 +142,7 @@ FEhist_base <- function( pinputexps)
 
   # no me engraso las manos con las tendencias
   param_local$Tendencias1$run <- TRUE  # FALSE, no corre nada de lo que sigue
-  param_local$Tendencias1$ventana <- 6
+  param_local$Tendencias1$ventana <- 8
   param_local$Tendencias1$tendencia <- TRUE
   param_local$Tendencias1$minimo <- FALSE
   param_local$Tendencias1$maximo <- FALSE
@@ -306,7 +306,8 @@ TS_strategy_base8 <- function( pinputexps )
     202101, 
     202012, 202011, 
     202010, 
-    202009, 202008, 202007, 202006, 
+    202009, 202008, 202007, 
+    # 202006, 
     202005, 
     # 202004, 202003, 
     202002, 202001,
@@ -328,7 +329,8 @@ TS_strategy_base8 <- function( pinputexps )
     202101, 
     202012, 202011, 
     202010, 
-    202009, 202008, 202007, 202006, 
+    202009, 202008, 202007, 
+    # 202006, 
     202005, 
     # 202004, 202003, 
     202002, 202001,
@@ -489,7 +491,7 @@ KA_evaluate_kaggle_semillerio <- function( pinputexps )
 # Que predice 202107 donde conozco la clase
 # y ya genera graficos
 
-wf_SEMI_ago_orden3 <- function( pnombrewf )
+wf_SEMI_ago_orden4 <- function( pnombrewf )
 {
   param_local <- exp_wf_init( pnombrewf ) # linea fija
 
@@ -502,14 +504,14 @@ wf_SEMI_ago_orden3 <- function( pnombrewf )
   FEhist_base()
   ultimo <- FErf_attributes_base()
   
-  #CN_canaritos_asesinos_base(ratio=0.6, desvio=0)
+  CN_canaritos_asesinos_base(ratio=1, desvio=0)
 
   ts8 <- TS_strategy_base8()
 
   # la Bayesian Optimization con el semillerio dentro
   ht <- HT_tuning_semillerio(
     semillerio = 50, # semillerio dentro de la Bayesian Optim
-    bo_iteraciones = 25  # iteraciones inteligentes, apenas 10
+    bo_iteraciones = 15  # iteraciones inteligentes, apenas 10
   )
 
 
@@ -531,6 +533,6 @@ wf_SEMI_ago_orden3 <- function( pnombrewf )
 # Aqui comienza el programa
 
 # llamo al workflow con future = 202108
-wf_SEMI_ago_orden3()
+wf_SEMI_ago_orden4()
 
 

@@ -302,7 +302,7 @@ TS_strategy_base8 <- function( pinputexps )
     202106, 202105, 
     # 202104, 
     202103, 
-    # 202102, 
+    202102, 
     202101, 
     202012, 202011, 
     202010, 
@@ -311,7 +311,7 @@ TS_strategy_base8 <- function( pinputexps )
     202005, 
     # 202004, 202003, 
     202002, 
-    # 202001,
+    202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,
@@ -326,7 +326,7 @@ TS_strategy_base8 <- function( pinputexps )
   param_local$train$training <- c(
     # 202104, 
     202103, 
-    # 202102, 
+    202102, 
     202101, 
     202012, 202011, 
     202010, 
@@ -335,7 +335,7 @@ TS_strategy_base8 <- function( pinputexps )
     202005, 
     # 202004, 202003, 
     202002, 
-    # 202001,
+    202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,

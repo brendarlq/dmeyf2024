@@ -146,7 +146,7 @@ FEhist_base <- function( pinputexps)
   param_local$Tendencias1$tendencia <- TRUE
   param_local$Tendencias1$minimo <- FALSE
   param_local$Tendencias1$maximo <- FALSE
-  param_local$Tendencias1$promedio <- FALSE
+  param_local$Tendencias1$promedio <- TRUE
   param_local$Tendencias1$ratioavg <- FALSE
   param_local$Tendencias1$ratiomax <- FALSE
 
@@ -156,7 +156,7 @@ FEhist_base <- function( pinputexps)
   param_local$Tendencias2$tendencia <- TRUE
   param_local$Tendencias2$minimo <- FALSE
   param_local$Tendencias2$maximo <- FALSE
-  param_local$Tendencias2$promedio <- FALSE
+  param_local$Tendencias2$promedio <- TRUE
   param_local$Tendencias2$ratioavg <- FALSE
   param_local$Tendencias2$ratiomax <- FALSE
 
@@ -296,7 +296,7 @@ TS_strategy_base8 <- function( pinputexps )
 
   param_local$future <- c(202108)
 
-  param_local$final_train$undersampling <- 0.02
+  param_local$final_train$undersampling <- 0.10
   param_local$final_train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
   param_local$final_train$training <- c(
     202106, 202105, 
@@ -307,7 +307,7 @@ TS_strategy_base8 <- function( pinputexps )
     202012, 202011, 
     202010, 
     202009, 202008, 202007, 
-    # 202006, 
+    202006, 
     202005, 
     # 202004, 202003, 
     202002, 202001,
@@ -330,7 +330,7 @@ TS_strategy_base8 <- function( pinputexps )
     202012, 202011, 
     202010, 
     202009, 202008, 202007, 
-    # 202006, 
+    202006, 
     202005, 
     # 202004, 202003, 
     202002, 202001,
@@ -344,7 +344,7 @@ TS_strategy_base8 <- function( pinputexps )
 
   # Atencion  0.2  de  undersampling de la clase mayoritaria,  los CONTINUA
   # 1.0 significa NO undersampling
-  param_local$train$undersampling <- 0.02
+  param_local$train$undersampling <- 0.10
   param_local$train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
 
   return( exp_correr_script( param_local ) ) # linea fija

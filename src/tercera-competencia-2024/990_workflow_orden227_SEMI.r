@@ -4,6 +4,7 @@
 # limpio la memoria
 rm(list = ls(all.names = TRUE)) # remove all objects
 gc(full = TRUE) # garbage collection
+setwd("~/dmeyf2024")
 
 require("rlang")
 require("yaml")
@@ -474,7 +475,7 @@ KA_evaluate_kaggle_semillerio <- function( pinputexps )
   param_local$envios_desde <- 10500L
   param_local$envios_hasta <- 12050L
   param_local$envios_salto <-   500L
-  param_local$competition <- "dm-ey-f-2024-segunda"
+  param_local$competition <- "dm-ey-f-2024-tercera"
   
   return( exp_correr_script( param_local ) ) # linea fija
 }
@@ -490,7 +491,7 @@ wf_SEMI_sep_orden1 <- function( pnombrewf )
 {
   param_local <- exp_wf_init( pnombrewf ) # linea fija
   
-  # Etapa especificacion dataset de la Segunda Competencia Kaggle
+  # Etapa especificacion dataset de la Tercera Competencia Kaggle
   DT_incorporar_dataset( "~/buckets/b1/datasets/competencia_03_R.csv.gz")
   
   CA_catastrophe_base( metodo="MachineLearning")

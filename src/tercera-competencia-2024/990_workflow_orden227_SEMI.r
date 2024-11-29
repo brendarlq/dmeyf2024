@@ -297,17 +297,18 @@ TS_strategy_base8 <- function( pinputexps )
   
   param_local$future <- c(202109)
   
-  param_local$final_train$undersampling <- 1.00
+  param_local$final_train$undersampling <- 0.1
   param_local$final_train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
   param_local$final_train$training <- c(
-    202106, 202105, 
+    202107, 202106, 202105, 
     # 202104, 
     202103, 
     # 202102, 
     202101, 
     202012, 202011, 
     202010, 
-    202009, 202008, 202007, 202006, 
+    #202009, 
+    202008, 202007, 202006, 
     202005, 
     # 202004, 202003, 
     202002, 
@@ -320,17 +321,19 @@ TS_strategy_base8 <- function( pinputexps )
   )
   
   
-  param_local$train$testing <- c(202106)
-  param_local$train$validation <- c(202105)
+  param_local$train$testing <- c(202107)
+  param_local$train$validation <- c(202106)
   
   param_local$train$training <- c(
+    202105,
     # 202104, 
     202103, 
     # 202102, 
     202101, 
     202012, 202011, 
     202010, 
-    202009, 202008, 202007, 202006, 
+    #202009, 
+    202008, 202007, 202006, 
     202005, 
     # 202004, 202003, 
     202002, 
@@ -345,7 +348,7 @@ TS_strategy_base8 <- function( pinputexps )
   
   # Atencion  0.2  de  undersampling de la clase mayoritaria,  los CONTINUA
   # 1.0 significa NO undersampling
-  param_local$train$undersampling <- 1.0
+  param_local$train$undersampling <- 0.1
   param_local$train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
   
   return( exp_correr_script( param_local ) ) # linea fija
@@ -492,7 +495,7 @@ KA_evaluate_kaggle_semillerio <- function( pinputexps )
 # Que predice 202107 donde conozco la clase
 # y ya genera graficos
 
-wf_SEMI_sep_orden2 <- function( pnombrewf )
+wf_SEMI_sep_orden3 <- function( pnombrewf )
 {
   param_local <- exp_wf_init( pnombrewf ) # linea fija
   
@@ -519,8 +522,8 @@ wf_SEMI_sep_orden2 <- function( pnombrewf )
   fm <- FM_final_models_lightgbm_semillerio( 
     c(ht, ts8), # los inputs
     ranks = c(1), # 1 = el mejor de la bayesian optimization
-    semillerio = 50,   # cantidad de semillas finales
-    repeticiones_exp = 1  # cantidad de repeticiones del semillerio
+    semillerio = 100,   # cantidad de semillas finales
+    repeticiones_exp = 3  # cantidad de repeticiones del semillerio
   )
   
   SC_scoring_semillerio( c(fm, ts8) )
@@ -534,6 +537,6 @@ wf_SEMI_sep_orden2 <- function( pnombrewf )
 # Aqui comienza el programa
 
 # llamo al workflow con future = 202109
-wf_SEMI_sep_orden2()
+wf_SEMI_sep_orden3()
 
 

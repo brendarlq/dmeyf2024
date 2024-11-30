@@ -301,18 +301,19 @@ TS_strategy_base8 <- function( pinputexps )
   param_local$final_train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
   param_local$final_train$training <- c(
     202107, 202106, 202105, 
-    # 202104, 
+    202104, 
     202103, 
-    # 202102, 
+    202102, 
     202101, 
     202012, 202011, 
     202010, 
     #202009, 
-    202008, 202007, 202006, 
+    202008, 202007, 
+    # 202006, 
     202005, 
-    # 202004, 202003, 
+    202004, 202003, 
     202002, 
-    # 202001,
+    202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,
@@ -326,18 +327,19 @@ TS_strategy_base8 <- function( pinputexps )
   
   param_local$train$training <- c(
     202105,
-    # 202104, 
+     202104, 
     202103, 
-    # 202102, 
+     202102, 
     202101, 
     202012, 202011, 
     202010, 
-    #202009, 
-    202008, 202007, 202006, 
+    # 202009, 
+    202008, 202007, 
+    # 202006, 
     202005, 
-    # 202004, 202003, 
+     202004, 202003, 
     202002, 
-    # 202001,
+     202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,
@@ -495,7 +497,7 @@ KA_evaluate_kaggle_semillerio <- function( pinputexps )
 # Que predice 202107 donde conozco la clase
 # y ya genera graficos
 
-wf_SEMI_sep_orden3 <- function( pnombrewf )
+wf_SEMI_sep_orden5 <- function( pnombrewf )
 {
   param_local <- exp_wf_init( pnombrewf ) # linea fija
   
@@ -523,7 +525,7 @@ wf_SEMI_sep_orden3 <- function( pnombrewf )
     c(ht, ts8), # los inputs
     ranks = c(1), # 1 = el mejor de la bayesian optimization
     semillerio = 50,   # cantidad de semillas finales
-    repeticiones_exp = 1  # cantidad de repeticiones del semillerio
+    repeticiones_exp = 4  # cantidad de repeticiones del semillerio
   )
   
   SC_scoring_semillerio( c(fm, ts8) )
@@ -537,6 +539,6 @@ wf_SEMI_sep_orden3 <- function( pnombrewf )
 # Aqui comienza el programa
 
 # llamo al workflow con future = 202109
-wf_SEMI_sep_orden3()
+wf_SEMI_sep_orden5()
 
 

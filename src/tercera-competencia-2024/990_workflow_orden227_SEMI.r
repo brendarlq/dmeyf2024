@@ -179,7 +179,7 @@ FErf_attributes_base <- function( pinputexps, ratio, desvio)
   
   # Parametros de un LightGBM que se genera para estimar la column importance
   param_local$train$clase01_valor1 <- c( "BAJA+2", "BAJA+1")
-  param_local$train$training <- c( 202101, 202102, 202103)
+  param_local$train$training <- c( 202102, 202103, 202105)
   
   # parametros para que LightGBM se comporte como Random Forest
   param_local$lgb_param <- list(
@@ -297,7 +297,7 @@ TS_strategy_base8 <- function( pinputexps )
   
   param_local$future <- c(202109)
   
-  param_local$final_train$undersampling <- 0.08
+  param_local$final_train$undersampling <- 0.10
   param_local$final_train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
   param_local$final_train$training <- c(
     202107, 202106, 202105, 
@@ -497,7 +497,7 @@ KA_evaluate_kaggle_semillerio <- function( pinputexps )
 # Que predice 202107 donde conozco la clase
 # y ya genera graficos
 
-wf_SEMI_sep_orden6 <- function( pnombrewf )
+wf_SEMI_sep_orden8 <- function( pnombrewf )
 {
   param_local <- exp_wf_init( pnombrewf ) # linea fija
   
@@ -524,7 +524,7 @@ wf_SEMI_sep_orden6 <- function( pnombrewf )
   fm <- FM_final_models_lightgbm_semillerio( 
     c(ht, ts8), # los inputs
     ranks = c(1), # 1 = el mejor de la bayesian optimization
-    semillerio = 50,   # cantidad de semillas finales
+    semillerio = 100,   # cantidad de semillas finales
     repeticiones_exp = 2  # cantidad de repeticiones del semillerio
   )
   
@@ -539,6 +539,6 @@ wf_SEMI_sep_orden6 <- function( pnombrewf )
 # Aqui comienza el programa
 
 # llamo al workflow con future = 202109
-wf_SEMI_sep_orden6()
+wf_SEMI_sep_orden8()
 
 

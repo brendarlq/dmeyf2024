@@ -52,7 +52,7 @@ AgregarVariables_IntraMes <- function(dataset) {
     dataset[, ctrx_quarter_normalizado := as.numeric(ctrx_quarter) ]
 
   if( atributos_presentes( c("ctrx_quarter", "cliente_antiguedad") ))
-    dataset[cliente_antiguedad == 1, ctrx_quarter_normalizado := ctrx_quarter * 5]
+    dataset[cliente_antiguedad == 1, ctrx_quarter_normalizado := ctrx_quarter * 4]
 
   if( atributos_presentes( c("ctrx_quarter", "cliente_antiguedad") ))
     dataset[cliente_antiguedad == 2, ctrx_quarter_normalizado := ctrx_quarter * 2]
@@ -209,6 +209,14 @@ AgregarVariables_IntraMes <- function(dataset) {
     dataset[, vmr_mpagominimo := vm_mpagominimo / vm_mlimitecompra]
 
   # Aqui debe usted agregar sus propias nuevas variables
+  
+  # CONSUMO SOBRE LÍMITE: (mtarjeta_visa_consumo + mtarjeta_master_consumo) / (Visa_mlimitecompra + Master_mlimitecompra)
+  dataset[, consumo_sobre_limite := ifelse(
+    (Visa_mlimitecompra + Master_mlimitecompra) > 0, 
+    (mtarjeta_visa_consumo + mtarjeta_master_consumo) / (Visa_mlimitecompra + Master_mlimitecompra), 
+    0)]
+  
+  dataset[, consumo_tarjeta_credito := mtarjeta_visa_consumo + mtarjeta_master_consumo]
 
   # valvula de seguridad para evitar valores infinitos
   # paso los infinitos a NULOS

@@ -300,8 +300,7 @@ TS_strategy_base8 <- function( pinputexps )
   param_local$final_train$undersampling <- 0.08
   param_local$final_train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
   param_local$final_train$training <- c(
-    202107, 202106, 202105, 
-    #202104, 
+    202107, 202106, 202105, 202104, 
     202103, 202102, 202101, 
     202012, 202011, 202010, 202009, 202008, 202007, 
     # 202006  Excluyo por variables rotas
@@ -481,7 +480,7 @@ KA_evaluate_kaggle_semillerio <- function( pinputexps )
 # Que predice 202107 donde conozco la clase
 # y ya genera graficos
 
-wf_SEMI_sep_orden4 <- function( pnombrewf )
+wf_SEMI_sep_orden7 <- function( pnombrewf )
 {
   param_local <- exp_wf_init( pnombrewf ) # linea fija
   
@@ -523,6 +522,6 @@ wf_SEMI_sep_orden4 <- function( pnombrewf )
 # Aqui comienza el programa
 
 # llamo al workflow con future = 202109
-wf_SEMI_sep_orden4()
+wf_SEMI_sep_orden7()
 
 

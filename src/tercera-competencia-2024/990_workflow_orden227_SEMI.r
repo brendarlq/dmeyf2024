@@ -179,7 +179,7 @@ FErf_attributes_base <- function( pinputexps, ratio, desvio)
   
   # Parametros de un LightGBM que se genera para estimar la column importance
   param_local$train$clase01_valor1 <- c( "BAJA+2", "BAJA+1")
-  param_local$train$training <- c( 202102, 202105, 202106)
+  param_local$train$training <- c( 202101, 202102, 202105)
   
   # parametros para que LightGBM se comporte como Random Forest
   param_local$lgb_param <- list(
@@ -314,10 +314,10 @@ TS_strategy_base8 <- function( pinputexps )
   )
   
   
-  param_local$train$testing <- c()
-  param_local$train$validation <- c(202107)
+  param_local$train$testing <- c(202107)
+  param_local$train$validation <- c(202105)
   
-  param_local$train$training <- c(202106, 202105,
+  param_local$train$training <- c(202106,
                                   # 202104, 202103, 
                                   202102, 202101, 
                                   202012, 202011, 202010, 202009, 202008, 202007, 
@@ -399,8 +399,9 @@ HT_tuning_semillerio <- function( pinputexps, semillerio, bo_iteraciones, bypass
     
     extra_trees = FALSE,
     # Parte variable
-    learning_rate = 0.03,
-    feature_fraction = c( 0.05, 0.95 ),
+    
+    learning_rate = c( 0.05, 0.1, 0.2 ),
+    feature_fraction = c( 0.4, 0.6, 0.8 ),
     
     leaf_size_log = c( -10, -5),   # deriva en min_data_in_leaf
     coverage_log = c( -8, 0 )      # deriva en num_leaves

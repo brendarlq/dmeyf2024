@@ -179,7 +179,7 @@ FErf_attributes_base <- function( pinputexps, ratio, desvio)
   
   # Parametros de un LightGBM que se genera para estimar la column importance
   param_local$train$clase01_valor1 <- c( "BAJA+2", "BAJA+1")
-  param_local$train$training <- c( 202101, 202102, 202103)
+  param_local$train$training <- c( 202102, 202105, 202106)
   
   # parametros para que LightGBM se comporte como Random Forest
   param_local$lgb_param <- list(
@@ -297,60 +297,44 @@ TS_strategy_base8 <- function( pinputexps )
   
   param_local$future <- c(202109)
   
-  param_local$final_train$undersampling <- 0.02
+  param_local$final_train$undersampling <- 0.08
   param_local$final_train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
   param_local$final_train$training <- c(
     202107, 202106, 202105, 
-    # 202104, 
-    # 202103, 
-    202102, 
-    202101, 
-    202012, 202011, 
-    202010, 
-    202009, 
-    202008, 202007, 
-    202006, 
-    202005, 
-    202004, 202003, 
-    202002, 
-    202001,
+    # 202104, 202103, 
+    202102, 202101, 
+    202012, 202011, 202010, 202009, 202008, 202007, 
+    # 202006  Excluyo por variables rotas
+    202005, 202004, 202003, 202002, 202001,
     201912, 201911,
     # 201910 Excluyo por variables rotas
     201909, 201908, 201907, 201906,
     # 201905  Excluyo por variables rotas
-    201904, 201903
+    201904, 201903, 201902, 201901
   )
   
   
-  param_local$train$testing <- c(202107)
-  param_local$train$validation <- c(202106)
+  param_local$train$testing <- c()
+  param_local$train$validation <- c(202107)
   
-  param_local$train$training <- c(
-    202105,
-    # 202104, 
-    # 202103, 
-     202102, 
-    202101, 
-    202012, 202011, 
-    202010, 
-    202009, 
-    202008, 202007, 
-    202006, 
-    202005, 
-     202004, 202003, 
-    202002, 
-     202001,
-    201912, 201911,
-    # 201910 Excluyo por variables rotas
-    201909, 201908, 201907, 201906,
-    # 201905  Excluyo por variables rotas
-    201904, 201903
+  param_local$train$training <- c(202106, 202105,
+                                  # 202104, 202103, 
+                                  202102, 202101, 
+                                  202012, 202011, 202010, 202009, 202008, 202007, 
+                                  # 202006  Excluyo por variables rotas
+                                  202005, 202004, 202003, 202002, 202001,
+                                  201912, 201911,
+                                  # 201910 Excluyo por variables rotas
+                                  201909, 201908, 201907, 201906,
+                                  # 201905  Excluyo por variables rotas
+                                  201904, 201903, 201902, 201901
   )
+  
   
   
   # Atencion  0.2  de  undersampling de la clase mayoritaria,  los CONTINUA
   # 1.0 significa NO undersampling
-  param_local$train$undersampling <-  0.02
+  param_local$train$undersampling <- 0.08
   param_local$train$clase_minoritaria <- c( "BAJA+1", "BAJA+2")
   
   return( exp_correr_script( param_local ) ) # linea fija
@@ -415,7 +399,7 @@ HT_tuning_semillerio <- function( pinputexps, semillerio, bo_iteraciones, bypass
     
     extra_trees = FALSE,
     # Parte variable
-    learning_rate = c( 0.3, 0.8 ),
+    learning_rate = 0.03,
     feature_fraction = c( 0.05, 0.95 ),
     
     leaf_size_log = c( -10, -5),   # deriva en min_data_in_leaf
@@ -517,7 +501,7 @@ wf_SEMI_sep_orden9 <- function( pnombrewf )
   # la Bayesian Optimization con el semillerio dentro
   ht <- HT_tuning_semillerio(
     semillerio = 50, # semillerio dentro de la Bayesian Optim
-    bo_iteraciones = 10  # iteraciones inteligentes, apenas 10
+    bo_iteraciones = 20  # iteraciones inteligentes, apenas 10
   )
   
   
@@ -540,5 +524,3 @@ wf_SEMI_sep_orden9 <- function( pnombrewf )
 
 # llamo al workflow con future = 202109
 wf_SEMI_sep_orden9()
-
-

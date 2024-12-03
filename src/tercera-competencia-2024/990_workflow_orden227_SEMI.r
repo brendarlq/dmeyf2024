@@ -400,8 +400,8 @@ HT_tuning_semillerio <- function( pinputexps, semillerio, bo_iteraciones, bypass
     extra_trees = FALSE,
     # Parte variable
     
-    learning_rate = c( 0.05, 0.1, 0.2 ),
-    feature_fraction = c( 0.4, 0.6, 0.8 ),
+    learning_rate = c( 0.05, 0.2 ),
+    feature_fraction = c( 0.4, 0.8 ),
     
     leaf_size_log = c( -10, -5),   # deriva en min_data_in_leaf
     coverage_log = c( -8, 0 )      # deriva en num_leaves
@@ -467,7 +467,7 @@ KA_evaluate_kaggle_semillerio <- function( pinputexps )
   
   param_local$irepes_submit <- 1:20 # misterioso parametro, no preguntar
   
-  param_local$envios_desde <- 10500L
+  param_local$envios_desde <- 10000L
   param_local$envios_hasta <- 12050L
   param_local$envios_salto <-   500L
   param_local$competition <- "dm-ey-f-2024-tercera"

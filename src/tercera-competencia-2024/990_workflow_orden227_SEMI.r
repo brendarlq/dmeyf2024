@@ -20,7 +20,7 @@ envg$EXPENV$repo_dir <- "~/dmeyf2024/"
 envg$EXPENV$datasets_dir <- "~/buckets/b1/datasets/"
 envg$EXPENV$messenger <- "~/install/zulip_enviar.sh"
 
-envg$EXPENV$semilla_primigenia <- 111119
+envg$EXPENV$semilla_primigenia <- 315697
 
 # leo el unico parametro del script
 args <- commandArgs(trailingOnly=TRUE)
@@ -400,8 +400,8 @@ HT_tuning_semillerio <- function( pinputexps, semillerio, bo_iteraciones, bypass
     extra_trees = FALSE,
     # Parte variable
     
-    learning_rate = c( 0.05, 0.2 ),
-    feature_fraction = c( 0.4, 0.8 ),
+    learning_rate = c( 0.03),
+    feature_fraction = c( 0.5 ),
     
     leaf_size_log = c( -10, -5),   # deriva en min_data_in_leaf
     coverage_log = c( -8, 0 )      # deriva en num_leaves
